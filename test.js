@@ -93,14 +93,16 @@ test('esast-util-from-estree', function (t) {
     ['0B1n', 'bin, cap'],
     ['0b1n', 'bin, low']
   ]
+  var index = -1
 
-  bigInts.forEach((d) => {
+  while (++index < bigInts.length) {
     t.deepEqual(
-      fromEstree(parse(d[0], {locations: true})).body[0].expression.bigint,
+      fromEstree(parse(bigInts[index][0], {locations: true})).body[0].expression
+        .bigint,
       '1',
-      'should transform and normalize bigints (`' + d[1] + '`)'
+      'should transform and normalize bigints (`' + bigInts[index][1] + '`)'
     )
-  })
+  }
 
   t.end()
 })

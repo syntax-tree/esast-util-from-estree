@@ -27,8 +27,9 @@
   "contributors": [
     "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)"
   ],
+  "sideEffects": false,
   "type": "module",
-  "module": "./index.js",
+  "main": "index.js",
   "files": [
     "index.js"
   ],
@@ -38,18 +39,17 @@
   },
   "devDependencies": {
     "acorn": "^8.0.0",
-    "c8": "^7.5.0",
-    "nyc": "^15.0.0",
+    "c8": "^7.0.0",
     "prettier": "^2.0.0",
     "remark-cli": "^9.0.0",
     "remark-preset-wooorm": "^8.0.0",
     "tape": "^5.0.0",
-    "xo": "^0.37.0"
+    "xo": "^0.39.0"
   },
   "scripts": {
     "format": "remark . -qfo && prettier . -w --loglevel warn && xo --fix",
-    "test-api": "node test",
-    "test-coverage": "c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 --reporter lcov node --experimental-modules test.js",
+    "test-api": "node test.js",
+    "test-coverage": "c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 --reporter lcov node test.js",
     "test": "npm run format && npm run test-coverage"
   },
   "prettier": {
@@ -62,7 +62,6 @@
   },
   "xo": {
     "prettier": true,
-    "ignores": [],
     "rules": {
       "no-var": "off",
       "prefer-arrow-callback": "off"

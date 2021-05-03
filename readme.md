@@ -17,13 +17,14 @@ This makes sure nodes are plain JSON, adds unist positions, normalizes
 
 ## Install
 
+This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c):
+Node 12+ is needed to use it and it must be `import`ed instead of `require`d.
+
 [npm][]:
 
 ```sh
 npm install esast-util-from-estree
 ```
-
-Note that this package is ESM only: it must be imported instead of required.
 
 ## Use
 
@@ -73,8 +74,7 @@ Yields:
 
 ## API
 
-`esast-util-from-estree` exports the following identifiers:
-[`fromEstree`](#fromestreeestree-options).
+This package exports the following identifiers: `fromEstree`.
 There is no default export.
 
 ### `fromEstree(estree, options?)`
