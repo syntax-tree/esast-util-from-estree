@@ -6,7 +6,8 @@ import {fromEstree} from './index.js'
 
 test('esast-util-from-estree', function (t) {
   t.deepEqual(
-    fromEstree(parse('console.log(1)', {locations: true})),
+    // @ts-ignore Similar enough.
+    fromEstree(parse('console.log(1)', {locations: true, ecmaVersion: 2021})),
     {
       type: 'Program',
       body: [
@@ -71,7 +72,10 @@ test('esast-util-from-estree', function (t) {
   )
 
   t.deepEqual(
-    fromEstree(parse('/(?:)/', {locations: true}).body[0].expression),
+    fromEstree(
+      // @ts-ignore Hush, it’s fine.
+      parse('/(?:)/', {locations: true, ecmaVersion: 2021}).body[0].expression
+    ),
     {
       type: 'Literal',
       value: null,
@@ -97,8 +101,9 @@ test('esast-util-from-estree', function (t) {
 
   while (++index < bigInts.length) {
     t.deepEqual(
-      fromEstree(parse(bigInts[index][0], {locations: true})).body[0].expression
-        .bigint,
+      // @ts-ignore Hush, it’s fine.
+      fromEstree(parse(bigInts[index][0], {locations: true, ecmaVersion: 2021}))
+        .body[0].expression.bigint,
       '1',
       'should transform and normalize bigints (`' + bigInts[index][1] + '`)'
     )

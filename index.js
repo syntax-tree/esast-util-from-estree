@@ -1,24 +1,50 @@
+/**
+ * @typedef {import('unist').Node} UnistNode
+ * @typedef {import('estree-jsx').Node} EstreeNode
+ * @typedef {import('estree-util-visit').Visitor} Visitor
+ *
+ * @typedef Options
+ * @property {boolean} [dirty=false]
+ */
+
 import {positionFromEstree} from 'unist-util-position-from-estree'
 import {visit} from 'estree-util-visit'
 
 var own = {}.hasOwnProperty
 
+/**
+ * @param {EstreeNode} estree
+ * @param {Options} [options]
+ * @returns {UnistNode}
+ */
 export function fromEstree(estree, options = {}) {
+  /** @type {UnistNode} */
   var tail
 
   visit(estree, {leave: onleave})
 
   return tail
 
+  /**
+   * @type {Visitor}
+   * @param {EstreeNode} node
+   */
   // eslint-disable-next-line complexity
   function onleave(node, field, index, parents) {
     var parent = parents[parents.length - 1]
+    /** @type {EstreeNode} */
     var context = index === null ? parent : parent[field]
+    /** @type {string|number} */
     var prop = index === null ? field : index
+    /** @type {UnistNode} */
     var copy = {}
+    /** @type {string} */
     var key
+    /** @type {RegExpMatchArray} */
     var match
+    /** @type {number} */
     var code
+    /** @type {unknown} */
     var value
 
     for (key in node) {
