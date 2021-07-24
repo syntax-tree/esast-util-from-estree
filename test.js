@@ -100,10 +100,14 @@ test('esast-util-from-estree', function (t) {
   var index = -1
 
   while (++index < bigInts.length) {
+    const tree = fromEstree(
+      // @ts-ignore Hush, it’s fine.
+      parse(bigInts[index][0], {locations: true, ecmaVersion: 2021})
+    )
+
     t.deepEqual(
       // @ts-ignore Hush, it’s fine.
-      fromEstree(parse(bigInts[index][0], {locations: true, ecmaVersion: 2021}))
-        .body[0].expression.bigint,
+      tree.body[0].expression.bigint,
       '1',
       'should transform and normalize bigints (`' + bigInts[index][1] + '`)'
     )
