@@ -10,7 +10,7 @@
 import {positionFromEstree} from 'unist-util-position-from-estree'
 import {visit} from 'estree-util-visit'
 
-var own = {}.hasOwnProperty
+const own = {}.hasOwnProperty
 
 /**
  * @param {EstreeNode} estree
@@ -19,7 +19,7 @@ var own = {}.hasOwnProperty
  */
 export function fromEstree(estree, options = {}) {
   /** @type {UnistNode} */
-  var tail
+  let tail
 
   visit(estree, {leave: onleave})
 
@@ -31,21 +31,15 @@ export function fromEstree(estree, options = {}) {
    */
   // eslint-disable-next-line complexity
   function onleave(node, field, index, parents) {
-    var parent = parents[parents.length - 1]
+    const parent = parents[parents.length - 1]
     /** @type {EstreeNode} */
-    var context = index === null ? parent : parent[field]
+    const context = index === null ? parent : parent[field]
     /** @type {string|number} */
-    var prop = index === null ? field : index
+    const prop = index === null ? field : index
     /** @type {UnistNode} */
-    var copy = {}
+    const copy = {}
     /** @type {string} */
-    var key
-    /** @type {RegExpMatchArray} */
-    var match
-    /** @type {number} */
-    var code
-    /** @type {unknown} */
-    var value
+    let key
 
     for (key in node) {
       if (
@@ -53,7 +47,8 @@ export function fromEstree(estree, options = {}) {
         (options.dirty ||
           (key !== 'start' && key !== 'end' && key !== 'loc' && key !== 'raw'))
       ) {
-        value = node[key]
+        /** @type {unknown} */
+        let value = node[key]
 
         // If this is a bigint or regex literal, reset value.
         if (
@@ -70,10 +65,10 @@ export function fromEstree(estree, options = {}) {
           key === 'bigint' &&
           typeof value === 'string'
         ) {
-          match = /0[box]/.exec(value.slice(0, 2).toLowerCase())
+          const match = /0[box]/.exec(value.slice(0, 2).toLowerCase())
 
           if (match) {
-            code = match[0].charCodeAt(1)
+            const code = match[0].charCodeAt(1)
             value = Number.parseInt(
               value.slice(2),
               code === 98 /* `x` */ ? 2 : code === 111 /* `o` */ ? 8 : 16

@@ -4,7 +4,7 @@ import test from 'tape'
 import {parse} from 'acorn'
 import {fromEstree} from './index.js'
 
-test('esast-util-from-estree', function (t) {
+test('esast-util-from-estree', (t) => {
   t.deepEqual(
     // @ts-ignore Similar enough.
     fromEstree(parse('console.log(1)', {locations: true, ecmaVersion: 2021})),
@@ -40,6 +40,7 @@ test('esast-util-from-estree', function (t) {
                 end: {line: 1, column: 12, offset: 11}
               }
             },
+            // @ts-expect-error: TS is wrong.
             arguments: [
               {
                 type: 'Literal',
@@ -88,7 +89,7 @@ test('esast-util-from-estree', function (t) {
     'should transform regexes'
   )
 
-  var bigInts = [
+  const bigInts = [
     ['1n', 'dec'],
     ['0X1n', 'hex, cap'],
     ['0x1n', 'hex, low'],
@@ -97,7 +98,7 @@ test('esast-util-from-estree', function (t) {
     ['0B1n', 'bin, cap'],
     ['0b1n', 'bin, low']
   ]
-  var index = -1
+  let index = -1
 
   while (++index < bigInts.length) {
     const tree = fromEstree(

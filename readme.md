@@ -33,8 +33,8 @@ import {parse} from 'acorn'
 import {fromEstree} from 'esast-util-from-estree'
 
 // Make acorn support comments and positional info.
-var comments = []
-var esast = parse(
+const comments = []
+const esast = parse(
   'export function x() { /* Something senseless */ console.log(/(?:)/ + 1n) }',
   {sourceType: 'module', locations: true, onComment: comments}
 )
