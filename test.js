@@ -6,7 +6,7 @@ import {fromEstree} from './index.js'
 
 test('esast-util-from-estree', (t) => {
   t.deepEqual(
-    // @ts-ignore Similar enough.
+    // @ts-expect-error Similar enough.
     fromEstree(parse('console.log(1)', {locations: true, ecmaVersion: 2021})),
     {
       type: 'Program',
@@ -74,7 +74,7 @@ test('esast-util-from-estree', (t) => {
 
   t.deepEqual(
     fromEstree(
-      // @ts-ignore Hush, it’s fine.
+      // @ts-expect-error Hush, it’s fine.
       parse('/(?:)/', {locations: true, ecmaVersion: 2021}).body[0].expression
     ),
     {
@@ -102,12 +102,12 @@ test('esast-util-from-estree', (t) => {
 
   while (++index < bigInts.length) {
     const tree = fromEstree(
-      // @ts-ignore Hush, it’s fine.
+      // @ts-expect-error Hush, it’s fine.
       parse(bigInts[index][0], {locations: true, ecmaVersion: 2021})
     )
 
     t.deepEqual(
-      // @ts-ignore Hush, it’s fine.
+      // @ts-expect-error Hush, it’s fine.
       tree.body[0].expression.bigint,
       '1',
       'should transform and normalize bigints (`' + bigInts[index][1] + '`)'
