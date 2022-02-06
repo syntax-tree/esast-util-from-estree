@@ -38,7 +38,6 @@ test('esast-util-from-estree', (t) => {
                 end: {line: 1, column: 12, offset: 11}
               }
             },
-            // @ts-expect-error: TS is wrong.
             arguments: [
               {
                 type: 'Literal',
