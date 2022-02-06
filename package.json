@@ -1,6 +1,6 @@
 {
   "name": "esast-util-from-estree",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "esast utility to transform from estree",
   "license": "MIT",
   "keywords": [
