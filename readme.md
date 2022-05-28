@@ -8,6 +8,10 @@
 [![Backers][backers-badge]][collective]
 [![Chat][chat-badge]][chat]
 
+[hast][] utility to transform to [mdast][].
+
+## Contents
+
 [**esast**][esast] utility to transform from [**estree**][estree].
 
 This is often an optional transform: estrees can be used in most places
