@@ -4,7 +4,9 @@
  * @typedef {import('estree-util-visit').Visitor} Visitor
  *
  * @typedef Options
+ *   Configuration (optional).
  * @property {boolean} [dirty=false]
+ *   Leave discouraged fields in the tree.
  */
 
 import {positionFromEstree} from 'unist-util-position-from-estree'

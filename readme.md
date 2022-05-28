@@ -8,26 +8,60 @@
 [![Backers][backers-badge]][collective]
 [![Chat][chat-badge]][chat]
 
-[hast][] utility to transform to [mdast][].
+[esast][] utility to transform from [estree][].
 
 ## Contents
 
-[**esast**][esast] utility to transform from [**estree**][estree].
+*   [What is this?](#what-is-this)
+*   [When should I use this?](#when-should-i-use-this)
+*   [Install](#install)
+*   [Use](#use)
+*   [API](#api)
+    *   [`fromEstree(estree, options?)`](#fromestreeestree-options)
+*   [Types](#types)
+*   [Compatibility](#compatibility)
+*   [Contribute](#contribute)
+*   [License](#license)
 
-This is often an optional transform: estrees can be used in most places
-where esast can be used, and vice versa.
-This makes sure nodes are plain JSON, adds unist positions, normalizes
-`.bigint`, and removes certain discouraged fields.
+## What is this?
+
+This package applies some transforms to a given estree to make it compatible
+with unist.
+It:
+
+*   makes sure nodes are plain JSON
+*   adds unist positions
+*   normalizes `.bigint`
+*   removes certain discouraged fields
+
+## When should I use this?
+
+The transform applied by this utility is often optional: estrees can be used in
+most places where esast can be used, and vice versa.
+But, if you come from a unist background and want to deal with JavaScript,
+or want to use unist utilities with JavaScript, this helps a lot.
 
 ## Install
 
-This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c):
-Node 12+ is needed to use it and it must be `import`ed instead of `require`d.
-
-[npm][]:
+This package is [ESM only][esm].
+In Node.js (version 12.20+, 14.14+, or 16.0+), install with [npm][]:
 
 ```sh
 npm install esast-util-from-estree
+```
+
+In Deno with [`esm.sh`][esmsh]:
+
+```js
+import {fromEstree} from 'https://esm.sh/esast-util-from-estree@1'
+```
+
+In browsers with [`esm.sh`][esmsh]:
+
+```html
+<script type="module">
+  import {fromEstree} from 'https://esm.sh/esast-util-from-estree@1?bundle'
+</script>
 ```
 
 ## Use
@@ -78,21 +112,37 @@ Yields:
 
 ## API
 
-This package exports the following identifiers: `fromEstree`.
+This package exports the identifier `fromEstree`.
 There is no default export.
 
 ### `fromEstree(estree, options?)`
 
 Given an [`estree`][estree] returns an [esast][].
 
-Pass `options.dirty: true` to leave discouraged fields in the tree.
+##### `options`
 
-## Related
+Configuration (optional).
+
+###### `options.dirty`
+
+Leave discouraged fields in the tree (`boolean`, default: `false`).
+
+## Types
+
+This package is fully typed with [TypeScript][].
+It exports the additional type `Options`.
+
+## Compatibility
+
+Projects maintained by the unified collective are compatible with all maintained
+versions of Node.js.
+As of now, that is Node.js 12.20+, 14.14+, 16.0+, and 18.0+.
+Our projects sometimes work with older versions, but this is not guaranteed.
 
 ## Contribute
 
-See [`contributing.md` in `syntax-tree/.github`][contributing] for ways to get
-started.
+See [`contributing.md`][contributing] in [`syntax-tree/.github`][health] for
+ways to get started.
 See [`support.md`][support] for ways to get help.
 
 This project has a [code of conduct][coc].
@@ -133,15 +183,23 @@ abide by its terms.
 
 [npm]: https://docs.npmjs.com/cli/install
 
+[esm]: https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c
+
+[esmsh]: https://esm.sh
+
+[typescript]: https://www.typescriptlang.org
+
 [license]: license
 
 [author]: https://wooorm.com
 
-[contributing]: https://github.com/syntax-tree/.github/blob/HEAD/contributing.md
+[health]: https://github.com/syntax-tree/.github
 
-[support]: https://github.com/syntax-tree/.github/blob/HEAD/support.md
+[contributing]: https://github.com/syntax-tree/.github/blob/main/contributing.md
 
-[coc]: https://github.com/syntax-tree/.github/blob/HEAD/code-of-conduct.md
+[support]: https://github.com/syntax-tree/.github/blob/main/support.md
+
+[coc]: https://github.com/syntax-tree/.github/blob/main/code-of-conduct.md
 
 [esast]: https://github.com/syntax-tree/esast
 
