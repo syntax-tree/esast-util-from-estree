@@ -32,6 +32,7 @@ It:
 *   makes sure nodes are plain JSON
 *   adds unist positions
 *   normalizes `.bigint`
+*   remove `attributes`, `selfClosing` from `JSXOpeningFragment`
 *   removes certain discouraged fields
 
 ## When should I use this?

@@ -1,11 +1,16 @@
 import test from 'tape'
-import {parse} from 'acorn'
+import {Parser} from 'acorn'
+import jsx from 'acorn-jsx'
 import {fromEstree} from './index.js'
+
+const parser = Parser.extend(jsx())
 
 test('esast-util-from-estree', (t) => {
   t.deepEqual(
-    // @ts-expect-error Similar enough.
-    fromEstree(parse('console.log(1)', {locations: true, ecmaVersion: 2021})),
+    fromEstree(
+      // @ts-expect-error Similar enough.
+      parser.parse('console.log(1)', {locations: true, ecmaVersion: 2021})
+    ),
     {
       type: 'Program',
       body: [
@@ -72,7 +77,8 @@ test('esast-util-from-estree', (t) => {
   t.deepEqual(
     fromEstree(
       // @ts-expect-error Hush, it’s fine.
-      parse('/(?:)/', {locations: true, ecmaVersion: 2021}).body[0].expression
+      parser.parse('/(?:)/', {locations: true, ecmaVersion: 2021}).body[0]
+        .expression
     ),
     {
       type: 'Literal',
@@ -84,6 +90,46 @@ test('esast-util-from-estree', (t) => {
       }
     },
     'should transform regexes'
+  )
+
+  t.deepEqual(
+    fromEstree(
+      // @ts-expect-error Hush, it’s fine.
+      parser.parse('<>b</>', {locations: true, ecmaVersion: 2021}).body[0]
+        .expression
+    ),
+    {
+      type: 'JSXFragment',
+      openingFragment: {
+        type: 'JSXOpeningFragment',
+        position: {
+          start: {line: 1, column: 1, offset: 0},
+          end: {line: 1, column: 3, offset: 2}
+        }
+      },
+      closingFragment: {
+        type: 'JSXClosingFragment',
+        position: {
+          start: {line: 1, column: 4, offset: 3},
+          end: {line: 1, column: 7, offset: 6}
+        }
+      },
+      children: [
+        {
+          type: 'JSXText',
+          value: 'b',
+          position: {
+            start: {line: 1, column: 3, offset: 2},
+            end: {line: 1, column: 4, offset: 3}
+          }
+        }
+      ],
+      position: {
+        start: {line: 1, column: 1, offset: 0},
+        end: {line: 1, column: 7, offset: 6}
+      }
+    },
+    'should transform jsx fragments'
   )
 
   const bigInts = [
@@ -100,7 +146,7 @@ test('esast-util-from-estree', (t) => {
   while (++index < bigInts.length) {
     const tree = fromEstree(
       // @ts-expect-error Hush, it’s fine.
-      parse(bigInts[index][0], {locations: true, ecmaVersion: 2021})
+      parser.parse(bigInts[index][0], {locations: true, ecmaVersion: 2021})
     )
 
     t.deepEqual(

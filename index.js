@@ -1,7 +1,6 @@
 /**
  * @typedef {import('unist').Node} UnistNode
  * @typedef {import('estree-jsx').Node} EstreeNode
- * @typedef {import('estree-util-visit').Visitor} Visitor
  *
  * @typedef Options
  *   Configuration (optional).
@@ -46,6 +45,13 @@ export function fromEstree(estree, options = {}) {
               key !== 'loc' &&
               key !== 'raw'))
         ) {
+          if (
+            node.type === 'JSXOpeningFragment' &&
+            (key === 'attributes' || key === 'selfClosing')
+          ) {
+            continue
+          }
+
           /** @type {unknown} */
           // @ts-expect-error: indexable.
           let value = node[key]
