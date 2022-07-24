@@ -36,7 +36,7 @@
   ],
   "types": "index.d.ts",
   "dependencies": {
-    "@types/estree-jsx": "^0.0.1",
+    "@types/estree-jsx": "^1.0.0",
     "estree-util-visit": "^1.0.0",
     "unist-util-position-from-estree": "^1.0.0"
   },
