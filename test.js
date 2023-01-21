@@ -3,10 +3,17 @@ import test from 'node:test'
 import {Parser} from 'acorn'
 import jsx from 'acorn-jsx'
 import {fromEstree} from './index.js'
+import * as mod from './index.js'
 
 const parser = Parser.extend(jsx())
 
-test('esast-util-from-estree', () => {
+test('fromEstree', () => {
+  assert.deepEqual(
+    Object.keys(mod).sort(),
+    ['fromEstree'],
+    'should expose the public api'
+  )
+
   assert.deepEqual(
     fromEstree(
       // @ts-expect-error Similar enough.
