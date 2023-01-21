@@ -1,12 +1,13 @@
-import test from 'tape'
+import assert from 'node:assert/strict'
+import test from 'node:test'
 import {Parser} from 'acorn'
 import jsx from 'acorn-jsx'
 import {fromEstree} from './index.js'
 
 const parser = Parser.extend(jsx())
 
-test('esast-util-from-estree', (t) => {
-  t.deepEqual(
+test('esast-util-from-estree', () => {
+  assert.deepEqual(
     fromEstree(
       // @ts-expect-error Similar enough.
       parser.parse('console.log(1)', {locations: true, ecmaVersion: 2021})
@@ -74,7 +75,7 @@ test('esast-util-from-estree', (t) => {
     'should transform'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromEstree(
       // @ts-expect-error Hush, it’s fine.
       parser.parse('/(?:)/', {locations: true, ecmaVersion: 2021}).body[0]
@@ -92,7 +93,7 @@ test('esast-util-from-estree', (t) => {
     'should transform regexes'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromEstree(
       // @ts-expect-error Hush, it’s fine.
       parser.parse('<>b</>', {locations: true, ecmaVersion: 2021}).body[0]
@@ -149,13 +150,11 @@ test('esast-util-from-estree', (t) => {
       parser.parse(bigInts[index][0], {locations: true, ecmaVersion: 2021})
     )
 
-    t.deepEqual(
+    assert.deepEqual(
       // @ts-expect-error Hush, it’s fine.
       tree.body[0].expression.bigint,
       '1',
       'should transform and normalize bigints (`' + bigInts[index][1] + '`)'
     )
   }
-
-  t.end()
 })
