@@ -17,7 +17,8 @@
 *   [Install](#install)
 *   [Use](#use)
 *   [API](#api)
-    *   [`fromEstree(estree, options?)`](#fromestreeestree-options)
+    *   [`fromEstree(estree[, options])`](#fromestreeestree-options)
+    *   [`Options`](#options)
 *   [Types](#types)
 *   [Compatibility](#compatibility)
 *   [Contribute](#contribute)
@@ -45,7 +46,7 @@ or want to use unist utilities with JavaScript, this helps a lot.
 ## Install
 
 This package is [ESM only][esm].
-In Node.js (version 12.20+, 14.14+, or 16.0+), install with [npm][]:
+In Node.js (version 14.14+ and 16.0+), install with [npm][]:
 
 ```sh
 npm install esast-util-from-estree
@@ -113,31 +114,43 @@ Yields:
 
 ## API
 
-This package exports the identifier `fromEstree`.
+This package exports the identifier [`fromEstree`][fromestree].
 There is no default export.
 
-### `fromEstree(estree, options?)`
+### `fromEstree(estree[, options])`
 
-Given an [`estree`][estree] returns an [esast][].
+Turn an estree into an esast.
 
-##### `options`
+###### Parameters
 
-Configuration (optional).
+*   `estree` ([`EstreeNode`][estree])
+    — estree
+*   `options` ([`Options`][options], optional)
+    — configuration
 
-###### `options.dirty`
+###### Returns
 
-Leave discouraged fields in the tree (`boolean`, default: `false`).
+esast ([`UnistNode`][esast]).
+
+### `Options`
+
+Configuration (TypeScript Type).
+
+###### Fields
+
+*   `dirty` (`boolean`, default: `false`)
+    — leave discouraged fields in the tree
 
 ## Types
 
 This package is fully typed with [TypeScript][].
-It exports the additional type `Options`.
+It exports the additional type [`Options`][options].
 
 ## Compatibility
 
 Projects maintained by the unified collective are compatible with all maintained
 versions of Node.js.
-As of now, that is Node.js 12.20+, 14.14+, 16.0+, and 18.0+.
+As of now, that is Node.js 14.14+ and 16.0+.
 Our projects sometimes work with older versions, but this is not guaranteed.
 
 ## Contribute
@@ -205,3 +218,7 @@ abide by its terms.
 [esast]: https://github.com/syntax-tree/esast
 
 [estree]: https://github.com/estree/estree
+
+[fromestree]: #fromestreeestree-options
+
+[options]: #options
