@@ -87,7 +87,6 @@ export function fromEstree(estree, options = {}) {
         }
       }
 
-      // @ts-expect-error: non-standard.
       copy.position = positionFromEstree(node)
 
       if (prop === null) {
