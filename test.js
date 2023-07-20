@@ -1,25 +1,31 @@
+/**
+ * @typedef {import('estree-jsx').Program} EstreeProgram
+ */
+
 import assert from 'node:assert/strict'
 import test from 'node:test'
 import {Parser} from 'acorn'
 import jsx from 'acorn-jsx'
 import {fromEstree} from './index.js'
-import * as mod from './index.js'
 
 const parser = Parser.extend(jsx())
 
-test('fromEstree', () => {
-  assert.deepEqual(
-    Object.keys(mod).sort(),
-    ['fromEstree'],
-    'should expose the public api'
-  )
+test('fromEstree', async function (t) {
+  await t.test('should expose the public api', async function () {
+    assert.deepEqual(Object.keys(await import('./index.js')).sort(), [
+      'fromEstree'
+    ])
+  })
 
-  assert.deepEqual(
-    fromEstree(
-      // @ts-expect-error Similar enough.
-      parser.parse('console.log(1)', {locations: true, ecmaVersion: 2021})
-    ),
-    {
+  await t.test('should transform', async function () {
+    /** @type {EstreeProgram} */
+    // @ts-expect-error: acorn looks like estree.
+    const tree = parser.parse('console.log(1)', {
+      locations: true,
+      ecmaVersion: 2021
+    })
+
+    assert.deepEqual(fromEstree(tree), {
       type: 'Program',
       body: [
         {
@@ -78,17 +84,17 @@ test('fromEstree', () => {
         start: {line: 1, column: 1, offset: 0},
         end: {line: 1, column: 15, offset: 14}
       }
-    },
-    'should transform'
-  )
+    })
+  })
 
-  assert.deepEqual(
-    fromEstree(
-      // @ts-expect-error Hush, it’s fine.
-      parser.parse('/(?:)/', {locations: true, ecmaVersion: 2021}).body[0]
-        .expression
-    ),
-    {
+  await t.test('should transform regexes', async function () {
+    /** @type {EstreeProgram} */
+    // @ts-expect-error: acorn looks like estree.
+    const tree = parser.parse('/(?:)/', {locations: true, ecmaVersion: 2021})
+    const statement = tree.body[0]
+    assert(statement.type === 'ExpressionStatement')
+
+    assert.deepEqual(fromEstree(statement.expression), {
       type: 'Literal',
       value: null,
       regex: {pattern: '(?:)', flags: ''},
@@ -96,17 +102,17 @@ test('fromEstree', () => {
         start: {line: 1, column: 1, offset: 0},
         end: {line: 1, column: 7, offset: 6}
       }
-    },
-    'should transform regexes'
-  )
+    })
+  })
 
-  assert.deepEqual(
-    fromEstree(
-      // @ts-expect-error Hush, it’s fine.
-      parser.parse('<>b</>', {locations: true, ecmaVersion: 2021}).body[0]
-        .expression
-    ),
-    {
+  await t.test('should transform jsx fragments', async function () {
+    /** @type {EstreeProgram} */
+    // @ts-expect-error: acorn looks like estree.
+    const tree = parser.parse('<>b</>', {locations: true, ecmaVersion: 2021})
+    const statement = tree.body[0]
+    assert(statement.type === 'ExpressionStatement')
+
+    assert.deepEqual(fromEstree(statement.expression), {
       type: 'JSXFragment',
       openingFragment: {
         type: 'JSXOpeningFragment',
@@ -136,32 +142,36 @@ test('fromEstree', () => {
         start: {line: 1, column: 1, offset: 0},
         end: {line: 1, column: 7, offset: 6}
       }
-    },
-    'should transform jsx fragments'
-  )
+    })
+  })
 
-  const bigInts = [
-    ['1n', 'dec'],
-    ['0X1n', 'hex, cap'],
-    ['0x1n', 'hex, low'],
-    ['0O1n', 'oct, cap'],
-    ['0o1n', 'oct, low'],
-    ['0B1n', 'bin, cap'],
-    ['0b1n', 'bin, low']
-  ]
-  let index = -1
+  await t.test('should transform and normalize bigints', async function () {
+    const bigInts = [
+      ['1n', 'dec'],
+      ['0X1n', 'hex, cap'],
+      ['0x1n', 'hex, low'],
+      ['0O1n', 'oct, cap'],
+      ['0o1n', 'oct, low'],
+      ['0B1n', 'bin, cap'],
+      ['0b1n', 'bin, low']
+    ]
+    let index = -1
 
-  while (++index < bigInts.length) {
-    const tree = fromEstree(
-      // @ts-expect-error Hush, it’s fine.
-      parser.parse(bigInts[index][0], {locations: true, ecmaVersion: 2021})
-    )
+    while (++index < bigInts.length) {
+      /** @type {EstreeProgram} */
+      // @ts-expect-error: acorn looks like estree.
+      const tree = parser.parse(bigInts[index][0], {
+        locations: true,
+        ecmaVersion: 2021
+      })
+      fromEstree(tree)
+      const statement = tree.body[0]
+      assert(statement.type === 'ExpressionStatement')
+      const expression = statement.expression
+      assert(expression.type === 'Literal')
+      assert('bigint' in expression)
 
-    assert.deepEqual(
-      // @ts-expect-error Hush, it’s fine.
-      tree.body[0].expression.bigint,
-      '1',
-      'should transform and normalize bigints (`' + bigInts[index][1] + '`)'
-    )
-  }
+      assert.deepEqual(expression.bigint, '1')
+    }
+  })
 })
