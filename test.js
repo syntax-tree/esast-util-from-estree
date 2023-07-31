@@ -20,12 +20,14 @@ test('fromEstree', async function (t) {
   await t.test('should transform', async function () {
     /** @type {EstreeProgram} */
     // @ts-expect-error: acorn looks like estree.
-    const tree = parser.parse('console.log(1)', {
+    let tree = parser.parse('console.log(1)', {
       locations: true,
       ecmaVersion: 2021
     })
 
-    assert.deepEqual(fromEstree(tree), {
+    tree = fromEstree(tree)
+
+    assert.deepEqual(tree, {
       type: 'Program',
       body: [
         {
@@ -90,13 +92,15 @@ test('fromEstree', async function (t) {
   await t.test('should transform regexes', async function () {
     /** @type {EstreeProgram} */
     // @ts-expect-error: acorn looks like estree.
-    const tree = parser.parse('/(?:)/', {locations: true, ecmaVersion: 2021})
+    let tree = parser.parse('/(?:)/', {locations: true, ecmaVersion: 2021})
+
+    tree = fromEstree(tree)
+
     const statement = tree.body[0]
     assert(statement.type === 'ExpressionStatement')
 
-    assert.deepEqual(fromEstree(statement.expression), {
+    assert.deepEqual(statement.expression, {
       type: 'Literal',
-      value: null,
       regex: {pattern: '(?:)', flags: ''},
       position: {
         start: {line: 1, column: 1, offset: 0},
@@ -108,11 +112,14 @@ test('fromEstree', async function (t) {
   await t.test('should transform jsx fragments', async function () {
     /** @type {EstreeProgram} */
     // @ts-expect-error: acorn looks like estree.
-    const tree = parser.parse('<>b</>', {locations: true, ecmaVersion: 2021})
+    let tree = parser.parse('<>b</>', {locations: true, ecmaVersion: 2021})
+
+    tree = fromEstree(tree)
+
     const statement = tree.body[0]
     assert(statement.type === 'ExpressionStatement')
 
-    assert.deepEqual(fromEstree(statement.expression), {
+    assert.deepEqual(statement.expression, {
       type: 'JSXFragment',
       openingFragment: {
         type: 'JSXOpeningFragment',
@@ -160,11 +167,13 @@ test('fromEstree', async function (t) {
     while (++index < bigInts.length) {
       /** @type {EstreeProgram} */
       // @ts-expect-error: acorn looks like estree.
-      const tree = parser.parse(bigInts[index][0], {
+      let tree = parser.parse(bigInts[index][0], {
         locations: true,
         ecmaVersion: 2021
       })
-      fromEstree(tree)
+
+      tree = fromEstree(tree)
+
       const statement = tree.body[0]
       assert(statement.type === 'ExpressionStatement')
       const expression = statement.expression

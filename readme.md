@@ -74,13 +74,15 @@ import {fromEstree} from 'esast-util-from-estree'
 
 // Make acorn support comments and positional info.
 const comments = []
-const esast = parse(
+const estree = parse(
   'export function x() { /* Something senseless */ console.log(/(?:)/ + 1n) }',
   {sourceType: 'module', locations: true, onComment: comments}
 )
-esast.comments = comments
+estree.comments = comments
 
-console.log(fromEstree(esast))
+const esast = fromEstree(estree)
+
+console.log(esast)
 ```
 
 Yields:
@@ -130,7 +132,7 @@ Turn an estree into an esast.
 
 ###### Returns
 
-esast ([`UnistNode`][esast]).
+Clean clone of `estree` ([`UnistNode`][esast]).
 
 ### `Options`
 
