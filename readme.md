@@ -55,14 +55,14 @@ npm install esast-util-from-estree
 In Deno with [`esm.sh`][esmsh]:
 
 ```js
-import {fromEstree} from 'https://esm.sh/esast-util-from-estree@1'
+import {fromEstree} from 'https://esm.sh/esast-util-from-estree@2'
 ```
 
 In browsers with [`esm.sh`][esmsh]:
 
 ```html
 <script type="module">
-  import {fromEstree} from 'https://esm.sh/esast-util-from-estree@1?bundle'
+  import {fromEstree} from 'https://esm.sh/esast-util-from-estree@2?bundle'
 </script>
 ```
 
