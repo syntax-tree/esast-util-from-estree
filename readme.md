@@ -26,8 +26,8 @@
 
 ## What is this?
 
-This package applies some transforms to a given estree to make it compatible
-with unist.
+This package applies some transforms to a cloned, given estree to make it
+compatible with unist.
 It:
 
 *   makes sure nodes are plain JSON
@@ -46,7 +46,7 @@ or want to use unist utilities with JavaScript, this helps a lot.
 ## Install
 
 This package is [ESM only][esm].
-In Node.js (version 14.14+ and 16.0+), install with [npm][]:
+In Node.js (version 16+), install with [npm][]:
 
 ```sh
 npm install esast-util-from-estree
@@ -70,13 +70,21 @@ In browsers with [`esm.sh`][esmsh]:
 
 ```js
 import {parse} from 'acorn'
-import {fromEstree} from 'esast-util-from-estree'
+import {fromEstree} from './index.js'
 
 // Make acorn support comments and positional info.
+/** @type {Array<import('acorn').Comment>} */
 const comments = []
+/** @type {import('estree').Program} */
+// @ts-expect-error: acorn looks like estree.
 const estree = parse(
   'export function x() { /* Something senseless */ console.log(/(?:)/ + 1n) }',
-  {sourceType: 'module', locations: true, onComment: comments}
+  {
+    sourceType: 'module',
+    ecmaVersion: 'latest',
+    locations: true,
+    onComment: comments
+  }
 )
 estree.comments = comments
 
@@ -116,7 +124,7 @@ Yields:
 
 ## API
 
-This package exports the identifier [`fromEstree`][fromestree].
+This package exports the identifier [`fromEstree`][api-from-estree].
 There is no default export.
 
 ### `fromEstree(estree[, options])`
@@ -127,7 +135,7 @@ Turn an estree into an esast.
 
 *   `estree` ([`EstreeNode`][estree])
     — estree
-*   `options` ([`Options`][options], optional)
+*   `options` ([`Options`][api-options], optional)
     — configuration
 
 ###### Returns
@@ -146,14 +154,17 @@ Configuration (TypeScript Type).
 ## Types
 
 This package is fully typed with [TypeScript][].
-It exports the additional type [`Options`][options].
+It exports the additional type [`Options`][api-options].
 
 ## Compatibility
 
-Projects maintained by the unified collective are compatible with all maintained
+Projects maintained by the unified collective are compatible with maintained
 versions of Node.js.
-As of now, that is Node.js 14.14+ and 16.0+.
-Our projects sometimes work with older versions, but this is not guaranteed.
+
+When we cut a new major release, we drop support for unmaintained versions of
+Node.
+This means we try to keep the current release line,
+`esast-util-from-estree@^1`, compatible with Node.js 12.
 
 ## Contribute
 
@@ -183,9 +194,9 @@ abide by its terms.
 
 [downloads]: https://www.npmjs.com/package/esast-util-from-estree
 
-[size-badge]: https://img.shields.io/bundlephobia/minzip/esast-util-from-estree.svg
+[size-badge]: https://img.shields.io/badge/dynamic/json?label=minzipped%20size&query=$.size.compressedSize&url=https://deno.bundlejs.com/?q=esast-util-from-estree
 
-[size]: https://bundlephobia.com/result?p=esast-util-from-estree
+[size]: https://bundlejs.com/?q=esast-util-from-estree
 
 [sponsors-badge]: https://opencollective.com/unified/sponsors/badge.svg
 
@@ -221,6 +232,6 @@ abide by its terms.
 
 [estree]: https://github.com/estree/estree
 
-[fromestree]: #fromestreeestree-options
+[api-from-estree]: #fromestreeestree-options
 
-[options]: #options
+[api-options]: #options
