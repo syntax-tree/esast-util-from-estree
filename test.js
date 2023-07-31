@@ -6,7 +6,7 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 import {Parser} from 'acorn'
 import jsx from 'acorn-jsx'
-import {fromEstree} from './index.js'
+import {fromEstree} from 'esast-util-from-estree'
 
 const parser = Parser.extend(jsx())
 

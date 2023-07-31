@@ -29,13 +29,12 @@
   ],
   "sideEffects": false,
   "type": "module",
-  "main": "index.js",
+  "exports": "./index.js",
   "files": [
     "lib/",
     "index.js",
     "index.d.ts"
   ],
-  "types": "index.d.ts",
   "dependencies": {
     "@types/estree-jsx": "^1.0.0",
     "devlop": "^1.0.0",
